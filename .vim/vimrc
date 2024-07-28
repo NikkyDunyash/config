@@ -1,0 +1,27 @@
+"indention
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+"line number
+set number
+
+"status line
+set statusline=buffers:\ %{buftabs#statusline()}%=%F%m%r%h%w
+set statusline+=%=[FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%l,%v][%p%%]\ [LEN=%L]
+set laststatus=2
+
+"buffers
+set hidden
+
+"buftabs 
+noremap <f1> :bprev<CR>
+noremap <f2> :bnext<CR>
+let g:buftabs_in_statusline=1
+let g:buftabs_only_basename=1
+
+"split panes
+nmap <C-k> :wincmd k<CR>
+nmap <C-j> :wincmd j<CR>
+nmap <C-h> :wincmd h<CR>
+nmap <C-l> :wincmd l<CR>

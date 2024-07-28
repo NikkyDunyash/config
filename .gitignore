@@ -1,0 +1,21 @@
+# nested reps
+*/.git
+
+# copies
+*~
+*.swp
+
+# logs
+*.log
+
+# examples
+*sample*
+*example*
+
+# pics
+*.gif
+*.jpg
+*.jpeg
+*.png
+
+.netrwhist

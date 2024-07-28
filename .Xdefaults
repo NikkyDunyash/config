@@ -1,0 +1,27 @@
+! XTerm defaults
+!
+! Remember to run `xrdb < .Xresources` after changing anything.
+!
+
+! Font
+XTerm*faceName: BigBlueTermPlusNerdFontMono:style=Regular
+XTerm*faceSize: 11
+! XTerm*font: 9x15
+
+
+! Background
+XTerm*Foreground: White
+XTerm*Background: Black
+
+
+! Selecting Text
+XTerm*highlightSelection: true
+Xterm*trimSelection: true
+
+! Coping
+<Btn1Up>: select-end(CLIPBOARD)
+XTerm*selectToClipboard: true
+
+! <Alt> behaviar
+XTerm*metaSendsEscape: true 
+
