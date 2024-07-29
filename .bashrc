@@ -85,8 +85,6 @@ else
 fi
 unset color_prompt force_color_prompt
 
-# If this is an xterm set the title to user@host:dir
-
 case "$TERM" in
 	xterm|rxvt*)
 	PS1="${debian_chroot:+($debian_chroot)}${WH_DF}░▒▓${WH_WH}█${K_WH}\u@\h:${WH_BL}\w${BL_DF}${RES}"
