@@ -17,7 +17,7 @@ multiplier = 3
 #startup modes:Windowed, Maximized, Fullscreen
 [window]
 dynamic_padding = false
-opacity = 1.0
+opacity = 0.98
 title = "Alacritty"
 startup_mode = "Windowed"
 
