@@ -7,6 +7,7 @@ readonly BAD_CL="#ff0000"
 readonly OK_CL="#ffffff"
 readonly GOOD_CL="#00ff00"
 
+
 function json_obj()
 {
 	local full_text=$1
@@ -35,10 +36,10 @@ function battery_json()
 	sym=""
 	color=""
 	cap=$(cat /sys/class/power_supply/BAT0/capacity)
-	status=$(cat /sys/class/power_supply/BAT0/status)
+	stat=$(cat /sys/class/power_supply/BAT0/status)
 	declare -a bat_syms=("󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" "󰂄")
 	sym=${bat_syms[(( $cap/10-1 ))]}
-	if [ "$status" = "Charging" ] || [ "$status" = "Full" ]; then
+	if [ $stat = "Charging" ] || [ $stat = "Full" ]; then
 		sym=${bat_syms[10]}
 		color=$GOOD_CL
 	elif (( $cap <= 20 )); then
@@ -50,6 +51,42 @@ function battery_json()
 	fi
 	
 	echo "$(json_obj "${sym} ${cap}%" "${color}")"
+}
+
+function ds_json()
+{
+    res=''
+    sym=" "
+    color='#ffffff'
+    ds_paths=(/sys/class/power_supply/ps-controller-battery-*)
+    
+    if echo $ds_paths | grep -q '*' ; then
+        return 1
+    fi
+
+    for p in ${ds_paths[@]}; do
+        stat=$(cat $p/status)
+        cap=$(cat $p/capacity)
+        if [ $stat = 'Charging' ] || [ $stat = 'Full' ]; then
+            color=$GOOD_CL
+        else
+            color='#'
+            color_array=()
+            brightness=0
+            rgb=('red' 'green' 'blue')
+            for i in ${!rgb[@]}; do
+                c_brightness=$(cat $p/device/leds/*${rgb[$i]}/brightness)
+                color_array[$i]=$c_brightness
+                let brightness+=color_array[$i]
+            done
+            for i in ${!color_array[@]}; do
+                color+=$(printf '%02x' $(printf '%.0f'\
+                    $(echo "${color_array[${i}]} * 255 / ${brightness}" | bc -l)))
+            done
+        fi
+        res+="$(json_obj "${sym} ${cap}%" "${color}"), "
+    done
+    echo $res
 }
 
 function mem_json()
@@ -74,10 +111,7 @@ function disk_json()
 		fi 
 	done <<< "$(df -h)"
 }
-# function cpu_json()
-# {
-	
-# }
+    
 
 # Send the header so that i3bar knows we want to use JSON:
 echo '{ "version": 1 }'
@@ -88,7 +122,7 @@ echo '[]'
 
 while true :
 do
-    echo ",[$(battery_json), $(mem_json), $(disk_json), \
+    echo ",[$(ds_json) $(battery_json), $(mem_json), $(disk_json), \
 		  $(time_json), $(date_json)]" \
 		|| exit 1
 	sleep 1
