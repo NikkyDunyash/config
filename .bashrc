@@ -2,10 +2,12 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-export PATH=$PATH:/home/nikky/.local/bin
+# Readline editing mode
+set -o vi
+export EDITOR=vi
+export VISUAL=$EDITOR
 
-# Toggle keyboard layout
-setxkbmap -model pc105 -layout us,ru -option grp:toggle
+export PATH=$PATH:/home/nikky/.local/bin
 
 # XTerm config
 xrdb -l ~/.Xdefaults
